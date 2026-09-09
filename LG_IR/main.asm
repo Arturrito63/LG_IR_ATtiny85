@@ -4,6 +4,8 @@
 ; Created: 25/8/2026 12:18:02
 ; Author : Jorge Albornoz
 ;
+; Programar CKSEL[3:0] = 010 /LFuse = 0xE2 (PLL interno a 16Mhz)
+;
 
 .dseg                   ; Cambiar al segmento de datos (SRAM)
 .org SRAM_START         ; Iniciar en la primera dirección de la SRAM
@@ -34,14 +36,8 @@ RESET:
     out SPL, r16
 
     ; --- Secuencia crítica de cambio de reloj (CLKPR) ---
-    cli                     ; Deshabilitar interrupciones por seguridad
-    
-    ;ldi r16, (1 << CLKPCE)  ; Paso 1: Habilitar el cambio de prescaler
-    ;out CLKPR, r16          
-    
-    ;ldi r16, (0 << CLKPS3)|(0 << CLKPS2)|(0 << CLKPS1)|(0 << CLKPS0) ; Paso 2: Divisor /2 = 8MHz
-    ;out CLKPR, r16          
-    
+    cli                     ; Deshabilitar interrupciones por seguridad     
+
 	; almacena la mascara de control en las variables mi_var y old_var
 	ldi r16, 0b00011100    ; Cargar mascara en el registro r16
     sts mi_var, r16
@@ -99,8 +95,7 @@ main:
    cpi r16, 0b00011100     ; Si no se presiono ningun botón salta a "main"
    breq main
    ; Si se presiono algún boton...
-   rcall delay_25ms
-   rcall delay_25ms
+   rcall delay_100ms
    lds r17, old_var
    cp r16,r17
    breq boton_sel
@@ -266,15 +261,20 @@ Y2: dec r24                 ; 1 ciclo
     brne Y1                 ; 2 ciclos si salta
     ret                     ; Retorno (4 ciclos)
 
-;--- Pausa de 25mSeg
-delay_25ms:
+;--- Pausa de 100mSeg
+delay_100ms:
+    ldi r25, 4
+Z0:	push r25
     ldi r25, 200            ; Multiplicador externo (1 ciclo)
 Z1: ldi r24, 254            ; Multiplicador interno (1 ciclo)
 Z2: dec r24                 ; 1 ciclo
     brne Z2                 ; 2 ciclos si salta, 1 si no
     dec r25                 ; 1 ciclo
     brne Z1                 ; 2 ciclos si salta
-    ret                     ; Retorno (4 ciclos)
+	pop r25
+	dec r25
+	brne Z0
+    ret                     ; Retorno (4 ciclos)                    ; Retorno (4 ciclos)
 
 ; *******************************************************************************
 PCINT0_ISR:
