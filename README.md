@@ -56,6 +56,6 @@ Si presionamos **Bit Selector** en AVRDUDESS podemos ver los **fuses** y **lock 
 Antes o después de programar el MCU se debe cambiar cualquier valor presente en la casilla que marca la imagen (L) por 0xE2 y presionar "Write", de esta forma ya queda funcionando a 8Mhz.
 
 ------------
-***Próximamente subiré el mismo proyecto pero utilizando un ATtiny13***  
+***Próximamente subiré el mismo proyecto utilizando un ATtiny13***  
 El circuito es exactamente el mismo, pero cambia el programa (hay que adecuarlo a un reloj de 4.8 o 9.6Mhz)
 
