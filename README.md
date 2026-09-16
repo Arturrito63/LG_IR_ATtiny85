@@ -5,7 +5,7 @@
 
 ### Descripción...
 
-En este proyecto utilizo un ATtiny85-20 dado que no necesito conectar más de 3 botones y un led infrarojo. En el diagrama de arriba se lo muestra alimentado con 9Vots, el cual se reduce a 5Volts mediante un regulador 78L05, pero este puede reemplazarse con un conector USB y conectarlo a una fuente o cargador de 5VDC regulados.  
+En este proyecto utilizo un ATtiny85-20 que tenía a mano dado que no necesito conectar más de 3 botones y un led infrarojo. En el diagrama de arriba se lo muestra alimentado con 9Vots, el cual se reduce a 5Volts mediante un regulador 78L05, pero este puede reemplazarse con un conector USB y conectarlo a una fuente o cargador de 5VDC regulados.  
 Si bien el MCU puede trabajar con tensiones mas bajas, se necesita un reloj interno a 8Mhz y esto solo es posible por encima de los 4Volts.
 
 El [Protocolo NEC](https://www.sbprojects.net/knowledge/ir/nec.php) utiliza una portadora (carrier) de 38KHhz sobre la cual se envían los pulsos de marca (inicio), dirección (addr) y datos (data).
@@ -53,4 +53,9 @@ Si presionamos **Bit Selector** en AVRDUDESS podemos ver los **fuses** y **lock 
 
 ![](https://github.com/Arturrito63/LG_IR/blob/main/Docs/fuses_&_look_bits.jpg)
 
-Antes o después de programar el MCU se debe cambiar cualquier valor presente en la casilla que marca la imagen (L) por 0xE2 y presionar "Write", de este forma ya queda funcionando a 8Mhz.
+Antes o después de programar el MCU se debe cambiar cualquier valor presente en la casilla que marca la imagen (L) por 0xE2 y presionar "Write", de esta forma ya queda funcionando a 8Mhz.
+
+------------
+***Próximamente subiré el mismo proyecto pero utilizando un ATtiny13***  
+El circuito es exactamente el mismo, pero cambia el programa (hay que adecuarlo a un reloj de 4.8 o 9.6Mhz)
+
