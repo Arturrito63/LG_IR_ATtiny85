@@ -1,7 +1,7 @@
 # LG IR
 ***Transmisor IR (modos service) para LG***
 
-![](https://github.com/Arturrito63/LG_IR/blob/main/Docs/esquema.jpg) 
+![](https://github.com/Arturrito63/LG_IR_ATtiny85/blob/main/Docs/esquema.jpg) 
 
 ### Descripción...
 
@@ -32,26 +32,26 @@ Los pares de bytes son los siguientes:
 0x0005  EF 
 
 ### InStart
-![](https://github.com/Arturrito63/LG_IR/blob/main/Docs/LG_InStart.jpg)
+![](https://github.com/Arturrito63/LG_IR_ATtiny85/blob/main/Docs/LG_InStart.jpg)
 
 
 ### EzAdjust
-![](https://github.com/Arturrito63/LG_IR/blob/main/Docs/LG_EzAdjust.jpg)
+![](https://github.com/Arturrito63/LG_IR_ATtiny85/blob/main/Docs/LG_EzAdjust.jpg)
 
 
 ### PowerOnly
-![](https://github.com/Arturrito63/LG_IR/blob/main/Docs/LG_PowerOnly.jpg)
+![](https://github.com/Arturrito63/LG_IR_ATtiny85/blob/main/Docs/LG_PowerOnly.jpg)
 
 Para los 3 casos anteriores, D2 corresponde a PB1 (cátodo) y puede verse la trama de pulsos invertidos, mientras que D3 corresponde PB0 (ánodo) y en este se puede ver la portadora de 38Khz.
 
 Por defecto el ATtiny85 viene de fabrica funcionando a 1Mhz (oscilador interno a 8Mhz y divisor por 8 **CKDIV8** activado), esto es con **lfuse**= 0x62. Para que funcione a 8Mhz hay que desactivar **CKDIV8**, para ello debemos cambiar **lfuse** a 0xE2.
 
 ***AVRDUDESS***
-![](https://github.com/Arturrito63/LG_IR/blob/main/Docs/AVRDUDESS.jpg)
+![](https://github.com/Arturrito63/LG_IR_ATtiny85/blob/main/Docs/AVRDUDESS.jpg)
 
 Si presionamos **Bit Selector** en AVRDUDESS podemos ver los **fuses** y **lock bits**
 
-![](https://github.com/Arturrito63/LG_IR/blob/main/Docs/fuses_&_look_bits.jpg)
+![](https://github.com/Arturrito63/LG_IR_ATtiny85/blob/main/Docs/fuses_&_look_bits.jpg)
 
 Antes o después de programar el MCU se debe cambiar cualquier valor presente en la casilla que marca la imagen (L) por 0xE2 y presionar "Write", de esta forma ya queda funcionando a 8Mhz.
 
