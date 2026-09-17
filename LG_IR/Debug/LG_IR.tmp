@@ -16,53 +16,56 @@
  </OBJECT_FILES>
  <HEX_FILES>
   <FILE>LG_IR.hex</FILE>
+  <FILE>LG_IR.eep</FILE>
  </HEX_FILES>
  <OUTPUT_FILES>
   <FILE>LG_IR.map</FILE>
   <FILE>LG_IR.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <mi_var><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>10</LINE></mi_var>
-  <old_var><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>11</LINE></old_var>
-  <byte_var><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>12</LINE></byte_var>
-  <addr_var><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>13</LINE></addr_var>
-  <data_var><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>14</LINE></data_var>
-  <code_1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>18</LINE></code_1>
-  <code_2><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>19</LINE></code_2>
-  <code_3><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>20</LINE></code_3>
-  <RESET><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>29</LINE></RESET>
-  <PCINT0_ISR><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>278</LINE></PCINT0_ISR>
-  <main><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>85</LINE></main>
-  <to_pd><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>103</LINE></to_pd>
-  <delay_100ms><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>263</LINE></delay_100ms>
-  <boton_sel><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>123</LINE></boton_sel>
-  <power_down><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>109</LINE></power_down>
-  <boton_1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>139</LINE></boton_1>
-  <boton_2><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>145</LINE></boton_2>
-  <boton_3><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>151</LINE></boton_3>
-  <boton_x><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>156</LINE></boton_x>
-  <eprom_word_rd><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>164</LINE></eprom_word_rd>
-  <send_trama><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>185</LINE></send_trama>
-  <L1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>166</LINE></L1>
-  <L2><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>174</LINE></L2>
-  <IR_long_pulse><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>229</LINE></IR_long_pulse>
-  <send_cmp_bytes><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>196</LINE></send_cmp_bytes>
-  <IR_short_pulse><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>237</LINE></IR_short_pulse>
-  <send_byte><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>204</LINE></send_byte>
-  <T1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>207</LINE></T1>
-  <B1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>211</LINE></B1>
-  <send_bit_0><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>224</LINE></send_bit_0>
-  <T2><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>212</LINE></T2>
-  <send_bit_1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>217</LINE></send_bit_1>
-  <delay_560us><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>243</LINE></delay_560us>
-  <delay_4500us><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>253</LINE></delay_4500us>
-  <X1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>245</LINE></X1>
-  <X2><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>246</LINE></X2>
-  <Y1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>255</LINE></Y1>
-  <Y2><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>256</LINE></Y2>
-  <Z0><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>265</LINE></Z0>
-  <Z1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>267</LINE></Z1>
-  <Z2><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>268</LINE></Z2>
-  <no_salva><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>293</LINE></no_salva>
+  <mi_var><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>12</LINE></mi_var>
+  <old_var><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>13</LINE></old_var>
+  <byte_var><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>14</LINE></byte_var>
+  <addr_var><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>15</LINE></addr_var>
+  <data_var><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>16</LINE></data_var>
+  <code_1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>20</LINE></code_1>
+  <code_2><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>21</LINE></code_2>
+  <code_3><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>22</LINE></code_3>
+  <RESET><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>31</LINE></RESET>
+  <PCINT0_ISR><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>294</LINE></PCINT0_ISR>
+  <clr_cont><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>118</LINE></clr_cont>
+  <main><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>86</LINE></main>
+  <Q1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>100</LINE></Q1>
+  <to_pd><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>111</LINE></to_pd>
+  <delay_100ms><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>279</LINE></delay_100ms>
+  <boton_sel><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>139</LINE></boton_sel>
+  <power_down><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>125</LINE></power_down>
+  <boton_1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>155</LINE></boton_1>
+  <boton_2><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>161</LINE></boton_2>
+  <boton_3><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>167</LINE></boton_3>
+  <boton_x><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>172</LINE></boton_x>
+  <eprom_word_rd><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>180</LINE></eprom_word_rd>
+  <send_trama><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>201</LINE></send_trama>
+  <L1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>182</LINE></L1>
+  <L2><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>190</LINE></L2>
+  <IR_long_pulse><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>245</LINE></IR_long_pulse>
+  <send_cmp_bytes><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>212</LINE></send_cmp_bytes>
+  <IR_short_pulse><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>253</LINE></IR_short_pulse>
+  <send_byte><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>220</LINE></send_byte>
+  <T1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>223</LINE></T1>
+  <B1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>227</LINE></B1>
+  <send_bit_0><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>240</LINE></send_bit_0>
+  <T2><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>228</LINE></T2>
+  <send_bit_1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>233</LINE></send_bit_1>
+  <delay_560us><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>259</LINE></delay_560us>
+  <delay_4500us><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>269</LINE></delay_4500us>
+  <X1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>261</LINE></X1>
+  <X2><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>262</LINE></X2>
+  <Y1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>271</LINE></Y1>
+  <Y2><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>272</LINE></Y2>
+  <Z0><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>281</LINE></Z0>
+  <Z1><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>283</LINE></Z1>
+  <Z2><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>284</LINE></Z2>
+  <no_salva><FILE>E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm</FILE><LINE>309</LINE></no_salva>
  </LABELS>
 </ASSEMBLER_INFO>

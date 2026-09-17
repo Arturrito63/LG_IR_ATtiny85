@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm Wed Sep 09 10:26:28 2026
+AVRASM ver. 2.2.8  E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm Thu Sep 17 09:58:05 2026
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATtiny_DFP\1.10.348\avrasm\inc\tn85def.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATtiny_DFP\1.10.348\avrasm\inc\tn85def.inc'
@@ -694,6 +694,8 @@ AVRASM ver. 2.2.8  E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm Wed S
                                  ; Created: 25/8/2026 12:18:02
                                  ; Author : Jorge Albornoz
                                  ;
+                                 ; Programar CKSEL[3:0] = 010 /LFuse = 0xE2 (PLL interno a 16Mhz)
+                                 ;
                                  
                                  .dseg                   ; Cambiar al segmento de datos (SRAM)
                                  .org SRAM_START         ; Iniciar en la primera dirección de la SRAM
@@ -705,16 +707,19 @@ AVRASM ver. 2.2.8  E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm Wed S
                                  
                                  .eseg                   ; Define el inicio del segmento de EEPROM
                                  .org 0x0000
-000000                           code_1: .byte 2         ; Código InStart
-000002                           code_2: .byte 2         ; Código EzAdjust
-000004                           code_3: .byte 2         ; Código PowerOnly
+000000 04
+000001 fb                        code_1: .db 0x04, 0xFB  ; Código InStart
+000002 04
+000003 ff                        code_2: .db 0x04, 0xFF  ; Código EzAdjust
+000004 04
+000005 fe                        code_3: .db 0x04, 0xFE  ; Código PowerOnly
                                  
                                  .cseg                   ; Define el inicio del segmento de código
                                  .org 0x0000             ; Vector de Reset
 000000 c002                         rjmp RESET
                                  
                                  .org PCI0addr
-000002 c0b0                          rjmp PCINT0_ISR     ; Vector de interrupción por cambio de pin (PCINT0)
+000002 c0b6                          rjmp PCINT0_ISR     ; Vector de interrupción por cambio de pin (PCINT0)
                                  
                                  RESET:
                                      ; --- Inicialización del puntero de pila (Stack Pointer) ---
@@ -764,226 +769,240 @@ AVRASM ver. 2.2.8  E:\Proyectos Atmel\ATTiny\ATtiny85\LG_IR\LG_IR\main.asm Wed S
                                      ; 5. Seleccionar qué pin(es) dentro del grupo activan la interrupción en PCMSK (Pin Change Mask Register)
 00001a e10c                          ldi r16, (1 << PCINT4)|(1 << PCINT3)|(1 << PCINT2)
 00001b bb05                          out PCMSK, r16      ; Habilita PCINT0 específicamente
-00001c e0c0                      	ldi r28, 0x00
-00001d e0d0                      	ldi r29, 0x00
+00001c d019                      	rcall clr_cont
                                  
-00001e 9478                          sei                     ; Reorientar interrupciones
-00001f c000                      	rjmp main
+00001d 9478                          sei                     ; Reorientar interrupciones
+00001e c000                      	rjmp main
                                  
                                  ; ############################################################################################################
                                  
                                  main:
-000020 9621                         adiw r28, 1
-000021 2f0c                         mov r16, r28
-000022 2f1d                         mov r17, r29
-000023 2301                         and r16, r17
-000024 3f0f                         cpi r16, 0xff           ; Si R28:R29 = 65.535 ejecuta power_down
-000025 f061                         breq to_pd
-000026 9100 0060                    lds r16, mi_var
-000028 310c                         cpi r16, 0b00011100     ; Si no se presiono ningun botón salta a "main"
-000029 f3b1                         breq main
-                                    ; Si se presiono algún boton...
-00002a d07c                         rcall delay_100ms
-00002b 9110 0061                    lds r17, old_var
-00002d 1701                         cp r16,r17
-00002e f069                         breq boton_sel
-00002f 9300 0061                    sts old_var, r16
-000031 cfee                         rjmp main
+00001f 9621                         adiw r28, 1
+                                    ;mov r16, r28
+                                    ;mov r17, r29
+                                    ;and r16, r17
+                                    ;cpi r16, 0xff           ; Si R28:R29 = 65.535 ejecuta power_down
+000020 23cd                         and r28, r29
+000021 3fcf                         cpi r28, 0xff
+000022 f421                         brne Q1
+000023 94f3                         inc r15
+000024 2d0f                         mov r16, r15
+000025 3f0f                         cpi r16, 0xff
+000026 f061                         breq to_pd
+                                 
+000027 9100 0060                 Q1: lds r16, mi_var
+000029 310c                          cpi r16, 0b00011100     ; Si no se presiono ningun botón salta a "main"
+00002a f3a1                          breq main
+                                     ; Si se presiono algún boton...
+00002b d081                          rcall delay_100ms
+00002c 9110 0061                     lds r17, old_var
+00002e 1701                          cp r16,r17
+00002f f091                          breq boton_sel
+000030 9300 0061                     sts old_var, r16
+000032 cfec                          rjmp main
                                  
                                  to_pd:
-000032 d001                         rcall power_down
-000033 cfec                         rjmp main
+000033 d002                         rcall clr_cont
+000034 d005                         rcall power_down
+000035 cfe9                         rjmp main
                                  
                                  ; ############################################################################################################
                                  
+                                 clr_cont:
+000036 e0c0                          ldi r28, 0x00
+000037 2fdc                      	mov r29, r28
+000038 2efc                      	mov r15, r28
+000039 9508                      	ret
+                                 
+                                 
                                  power_down:
                                  ; Configurar bits SM1=1, SM0=0 (Power-down) y SE=1 (Sleep Enable)
-000034 930f                          push r16
-000035 e300                      	ldi r16, (1 << SM1) | (1 << SE)
-000036 bf05                          out MCUCR, r16
+00003a 930f                          push r16
+00003b e300                      	ldi r16, (1 << SM1) | (1 << SE)
+00003c bf05                          out MCUCR, r16
                                  
-000037 9588                          sleep               ; El ATtiny85 se duerme por completo aquí
+00003d 9588                          sleep               ; El ATtiny85 se duerme por completo aquí
                                  
                                      ; Al despertar por el botón, el código continúa desde aquí:
-000038 e000                          ldi r16, 0x00
-000039 bf05                          out MCUCR, r16      ; Deshabilita el modo sleep por seguridad (SE=0)
-00003a 910f                      	pop r16
-00003b 9508                          ret
+00003e e000                          ldi r16, 0x00
+00003f bf05                          out MCUCR, r16      ; Deshabilita el modo sleep por seguridad (SE=0)
+000040 910f                      	pop r16
+000041 9508                          ret
                                  
                                  boton_sel:
-00003c 6800                         sbr r16, 0x80  ; Activa bit indicador de interrupción atendida (0b10000000)
+000042 6800                         sbr r16, 0x80  ; Activa bit indicador de interrupción atendida (0b10000000)
                                     ; Si boton 1 presionado
-00003d ff02                         sbrs r16, 2
-00003e c005                         rjmp boton_1
+000043 ff02                         sbrs r16, 2
+000044 c005                         rjmp boton_1
                                     ;nop
                                     ; Si boton 2 presionado
-00003f ff03                         sbrs r16, 3
-000040 c007                         rjmp boton_2
+000045 ff03                         sbrs r16, 3
+000046 c007                         rjmp boton_2
                                     ;nop
                                     ; Si boton 3 presionado
-000041 ff04                         sbrs r16, 4
-000042 c009                         rjmp boton_3
+000047 ff04                         sbrs r16, 4
+000048 c009                         rjmp boton_3
                                     ;nop
-000043 cfdc                         rjmp main
+000049 cfd5                         rjmp main
                                  
                                  boton_1:
-000044 6004                         ori R16, 0b00000100   ; Borra botón 1 presionado
-000045 e090                         ldi r25, high(code_1)
-000046 e080                         ldi r24, low(code_1)
-000047 c007                         rjmp boton_x
+00004a 6004                         ori R16, 0b00000100   ; Borra botón 1 presionado
+00004b e090                         ldi r25, high(code_1)
+00004c e080                         ldi r24, low(code_1)
+00004d c007                         rjmp boton_x
                                  
                                  boton_2:
-000048 6008                         ori R16, 0b00001000   ; Borra botón 2 presionado
-000049 e090                         ldi r25, high(code_2)
-00004a e082                         ldi r24, low(code_2)
-00004b c003                         rjmp boton_x
+00004e 6008                         ori R16, 0b00001000   ; Borra botón 2 presionado
+00004f e090                         ldi r25, high(code_2)
+000050 e082                         ldi r24, low(code_2)
+000051 c003                         rjmp boton_x
                                  
                                  boton_3:
-00004c 6100                         ori R16, 0b00010000   ; Borra botón 3 presionado
-00004d e090                         ldi r25, high(code_3)
-00004e e084                         ldi r24, low(code_3)
+000052 6100                         ori R16, 0b00010000   ; Borra botón 3 presionado
+000053 e090                         ldi r25, high(code_3)
+000054 e084                         ldi r24, low(code_3)
                                  
                                  boton_x:
-00004f d005                         rcall eprom_word_rd
-000050 d018                         rcall send_trama
-000051 770f                         cbr r16, 0b10000000
-000052 9300 0060                    sts mi_var, r16       ; Borra botón presionado en "mi_var"
-000054 cfcb                         rjmp main
+000055 d005                         rcall eprom_word_rd
+000056 d018                         rcall send_trama
+000057 770f                         cbr r16, 0b10000000
+000058 9300 0060                    sts mi_var, r16       ; Borra botón presionado en "mi_var"
+00005a cfc4                         rjmp main
                                  
                                  
                                  eprom_word_rd:
-000055 931f                          push r17            ; Guarda el contenido de R17
-000056 99e1                      L1: sbic EECR, EEPE
-000057 cffe                          rjmp L1
-000058 bb9f                      	out EEARH, r25
-000059 bb8e                      	out EEARL, r24
-00005a 9ae0                      	sbi EECR, EERE
-00005b b31d                      	in r17, EEDR
-00005c 9310 0063                 	sts addr_var, r17
-00005e 9601                      	adiw r24,1
-00005f 99e1                      L2: sbic EECR, EEPE
-000060 cffe                          rjmp L2
-000061 bb9f                      	out EEARH, r25
-000062 bb8e                      	out EEARL, r24
-000063 9ae0                      	sbi EECR, EERE
-000064 b31d                      	in r17, EEDR
-000065 9310 0064                 	sts data_var, r17
-000067 911f                      	pop r17
-000068 9508                      	ret
+00005b 931f                          push r17            ; Guarda el contenido de R17
+00005c 99e1                      L1: sbic EECR, EEPE
+00005d cffe                          rjmp L1
+00005e bb9f                      	out EEARH, r25
+00005f bb8e                      	out EEARL, r24
+000060 9ae0                      	sbi EECR, EERE
+000061 b31d                      	in r17, EEDR
+000062 9310 0063                 	sts addr_var, r17
+000064 9601                      	adiw r24,1
+000065 99e1                      L2: sbic EECR, EEPE
+000066 cffe                          rjmp L2
+000067 bb9f                      	out EEARH, r25
+000068 bb8e                      	out EEARL, r24
+000069 9ae0                      	sbi EECR, EERE
+00006a b31d                      	in r17, EEDR
+00006b 9310 0064                 	sts data_var, r17
+00006d 911f                      	pop r17
+00006e 9508                      	ret
                                  
                                  
                                  send_trama:
-000069 930f                      	push r16             ; Guarda el contenido de R16
-00006a d024                      	rcall IR_long_pulse  ; Pulso de inicio de Trama
-00006b 9100 0063                 	lds r16, addr_var    ; Carga addr
-00006d d006                      	rcall send_cmp_bytes
-00006e 9100 0064                 	lds r16, data_var    ; Carga data
-000070 d003                      	rcall send_cmp_bytes
-000071 d023                      	rcall IR_short_pulse ; Pulso de fin de trama
-000072 910f                      	pop r16              ; Restaura el contenido de r16
-000073 9508                      	ret
+00006f 930f                      	push r16             ; Guarda el contenido de R16
+000070 d024                      	rcall IR_long_pulse  ; Pulso de inicio de Trama
+000071 9100 0063                 	lds r16, addr_var    ; Carga addr
+000073 d006                      	rcall send_cmp_bytes
+000074 9100 0064                 	lds r16, data_var    ; Carga data
+000076 d003                      	rcall send_cmp_bytes
+000077 d023                      	rcall IR_short_pulse ; Pulso de fin de trama
+000078 910f                      	pop r16              ; Restaura el contenido de r16
+000079 9508                      	ret
                                  
                                  send_cmp_bytes:         ; Envia un byte seguido de su complento a uno
-000074 9300 0062                 	sts byte_var, r16
-000076 d005                      	rcall send_byte
-000077 9100 0062                 	lds r16, byte_var
-000079 9500                      	com r16
-00007a d001                      	rcall send_byte
-00007b 9508                      	ret
+00007a 9300 0062                 	sts byte_var, r16
+00007c d005                      	rcall send_byte
+00007d 9100 0062                 	lds r16, byte_var
+00007f 9500                      	com r16
+000080 d001                      	rcall send_byte
+000081 9508                      	ret
                                  
                                  send_byte:              ; Envia el contenido de R16
-00007c 931f                          push r17            ; Guarda el contenido de R17
-00007d e018                      	ldi r17, 8
-00007e 9506                      T1: lsr r16
-00007f f010                          brcs B1
-000080 d00b                      	rcall send_bit_0
-000081 c001                      	rjmp T2
-000082 d004                      B1: rcall send_bit_1
-000083 951a                      T2: dec r17
-000084 f7c9                          brne T1
-000085 911f                      	pop r17             ; Restaura el contenido de r17
-000086 9508                      	ret
+000082 931f                          push r17            ; Guarda el contenido de R17
+000083 e018                      	ldi r17, 8
+000084 9506                      T1: lsr r16
+000085 f010                          brcs B1
+000086 d00b                      	rcall send_bit_0
+000087 c001                      	rjmp T2
+000088 d004                      B1: rcall send_bit_1
+000089 951a                      T2: dec r17
+00008a f7c9                          brne T1
+00008b 911f                      	pop r17             ; Restaura el contenido de r17
+00008c 9508                      	ret
                                  
                                  send_bit_1:
-000087 d00d                          rcall IR_short_pulse
-000088 d010                      	rcall delay_560us
-000089 d00f                      	rcall delay_560us
-00008a d00e                      	rcall delay_560us
-00008b 9508                      	ret
+00008d d00d                          rcall IR_short_pulse
+00008e d010                      	rcall delay_560us
+00008f d00f                      	rcall delay_560us
+000090 d00e                      	rcall delay_560us
+000091 9508                      	ret
                                  
                                  send_bit_0:
-00008c d008                      	rcall IR_short_pulse
-00008d d00b                      	rcall delay_560us
-00008e 9508                      	ret
-                                 
-                                 	IR_long_pulse:
-00008f 98c1                          cbi PORTB, 1 ;Led ON a 38KHz
-000090 d00f                      	rcall delay_4500us
-000091 d00e                      	rcall delay_4500us
-000092 9ac1                      	sbi PORTB, 1 ;Led OFF
-000093 d00c                      	rcall delay_4500us
+000092 d008                      	rcall IR_short_pulse
+000093 d00b                      	rcall delay_560us
 000094 9508                      	ret
                                  
-                                 IR_short_pulse:
+                                 	IR_long_pulse:
 000095 98c1                          cbi PORTB, 1 ;Led ON a 38KHz
-000096 d002                      	rcall delay_560us
-000097 9ac1                      	sbi PORTB, 1 ;Led OFF
-000098 9508                      	ret
+000096 d00f                      	rcall delay_4500us
+000097 d00e                      	rcall delay_4500us
+000098 9ac1                      	sbi PORTB, 1 ;Led OFF
+000099 d00c                      	rcall delay_4500us
+00009a 9508                      	ret
+                                 
+                                 IR_short_pulse:
+00009b 98c1                          cbi PORTB, 1 ;Led ON a 38KHz
+00009c d002                      	rcall delay_560us
+00009d 9ac1                      	sbi PORTB, 1 ;Led OFF
+00009e 9508                      	ret
                                  
                                  delay_560us:
-000099 e096                          ldi r25, 6              ; Multiplicador externo (1 ciclo)
-00009a ef8a                      X1: ldi r24, 250            ; Multiplicador interno (1 ciclo) 248/250
-00009b 958a                      X2: dec r24                 ; 1 ciclo
-00009c f7f1                          brne X2                 ; 2 ciclos si salta, 1 si no
-00009d 959a                          dec r25                 ; 1 ciclo
-00009e f7d9                          brne X1                 ; 2 ciclos si salta
-00009f 9508                          ret                     ; Retorno (4 ciclos)
+00009f e096                          ldi r25, 6              ; Multiplicador externo (1 ciclo)
+0000a0 ef8a                      X1: ldi r24, 250            ; Multiplicador interno (1 ciclo) 248/250
+0000a1 958a                      X2: dec r24                 ; 1 ciclo
+0000a2 f7f1                          brne X2                 ; 2 ciclos si salta, 1 si no
+0000a3 959a                          dec r25                 ; 1 ciclo
+0000a4 f7d9                          brne X1                 ; 2 ciclos si salta
+0000a5 9508                          ret                     ; Retorno (4 ciclos)
                                  
                                  
                                  delay_4500us:
-0000a0 e390                          ldi r25, 48             ; Multiplicador externo (1 ciclo)
-0000a1 ef8d                      Y1: ldi r24, 253            ; Multiplicador interno (1 ciclo)
-0000a2 958a                      Y2: dec r24                 ; 1 ciclo
-0000a3 f7f1                          brne Y2                 ; 2 ciclos si salta, 1 si no
-0000a4 959a                          dec r25                 ; 1 ciclo
-0000a5 f7d9                          brne Y1                 ; 2 ciclos si salta
-0000a6 9508                          ret                     ; Retorno (4 ciclos)
+0000a6 e390                          ldi r25, 48             ; Multiplicador externo (1 ciclo)
+0000a7 ef8d                      Y1: ldi r24, 253            ; Multiplicador interno (1 ciclo)
+0000a8 958a                      Y2: dec r24                 ; 1 ciclo
+0000a9 f7f1                          brne Y2                 ; 2 ciclos si salta, 1 si no
+0000aa 959a                          dec r25                 ; 1 ciclo
+0000ab f7d9                          brne Y1                 ; 2 ciclos si salta
+0000ac 9508                          ret                     ; Retorno (4 ciclos)
                                  
                                  ;--- Pausa de 100mSeg
                                  delay_100ms:
-0000a7 e094                          ldi r25, 4
-0000a8 939f                      Z0:	push r25
-0000a9 ec98                          ldi r25, 200            ; Multiplicador externo (1 ciclo)
-0000aa ef8e                      Z1: ldi r24, 254            ; Multiplicador interno (1 ciclo)
-0000ab 958a                      Z2: dec r24                 ; 1 ciclo
-0000ac f7f1                          brne Z2                 ; 2 ciclos si salta, 1 si no
-0000ad 959a                          dec r25                 ; 1 ciclo
-0000ae f7d9                          brne Z1                 ; 2 ciclos si salta
-0000af 919f                      	pop r25
-0000b0 959a                      	dec r25
-0000b1 f7b1                      	brne Z0
-0000b2 9508                          ret                     ; Retorno (4 ciclos)                    ; Retorno (4 ciclos)
+0000ad e094                          ldi r25, 4
+0000ae 939f                      Z0:	push r25
+0000af ec98                          ldi r25, 200            ; Multiplicador externo (1 ciclo)
+0000b0 ef8e                      Z1: ldi r24, 254            ; Multiplicador interno (1 ciclo)
+0000b1 958a                      Z2: dec r24                 ; 1 ciclo
+0000b2 f7f1                          brne Z2                 ; 2 ciclos si salta, 1 si no
+0000b3 959a                          dec r25                 ; 1 ciclo
+0000b4 f7d9                          brne Z1                 ; 2 ciclos si salta
+0000b5 919f                      	pop r25
+0000b6 959a                      	dec r25
+0000b7 f7b1                      	brne Z0
+0000b8 9508                          ret                     ; Retorno (4 ciclos)                    ; Retorno (4 ciclos)
                                  
                                  ; *******************************************************************************
                                  PCINT0_ISR:
                                      ; Rutina de servicio de interrupción
-0000b3 930f                      	push r16            ; Guarda el contenido de R16
+0000b9 930f                      	push r16            ; Guarda el contenido de R16
                                  
-0000b4 9100 0060                 	lds r16, mi_var
-0000b6 fd07                      	sbrc r16, 7
-0000b7 c006                      	rjmp no_salva
+0000ba 9100 0060                 	lds r16, mi_var
+0000bc fd07                      	sbrc r16, 7
+0000bd c006                      	rjmp no_salva
                                  
-0000b8 b70f                          in  r16, SREG       ; Guardar SREG por seguridad
-0000b9 930f                          push r16
+0000be b70f                          in  r16, SREG       ; Guardar SREG por seguridad
+0000bf 930f                          push r16
                                  
-0000ba b306                          in  r16, PINB
-0000bb 710c                      	andi r16, 0b00011100
-0000bc 9300 0060                     sts mi_var, r16     ; 0b000xxx00 -> mi_var
+0000c0 b306                          in  r16, PINB
+0000c1 710c                      	andi r16, 0b00011100
+0000c2 9300 0060                     sts mi_var, r16     ; 0b000xxx00 -> mi_var
                                  
                                  no_salva:
-0000be 910f                          pop r16             ; Restaurar SREG
-0000bf bf0f                          out SREG, r16
-0000c0 910f                      	pop r16             ; Restaura el contenido de R16
+0000c4 910f                          pop r16             ; Restaurar SREG
+0000c5 bf0f                          out SREG, r16
+0000c6 910f                      	pop r16             ; Restaura el contenido de R16
 
 
 RESOURCE USE INFORMATION
@@ -1003,36 +1022,36 @@ counted separately from r26..r31 here.
 "ATtiny85" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  62 r17:  14 r18:   0 r19:   0 r20:   0 
-r21:   0 r22:   0 r23:   0 r24:  12 r25:  15 r26:   0 r27:   0 r28:   3 
+r13:   0 r14:   0 r15:   3 r16:  61 r17:  12 r18:   0 r19:   0 r20:   0 
+r21:   0 r22:   0 r23:   0 r24:  12 r25:  15 r26:   0 r27:   0 r28:   6 
 r29:   2 r30:   0 r31:   0 
-Registers used: 6 out of 35 (17.1%)
+Registers used: 7 out of 35 (20.0%)
 
 "ATtiny85" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   2 and   :   1 
 andi  :   1 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   0 brcs  :   1 break :   0 breq  :   3 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :   8 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brne  :   9 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   0 cbi   :   3 cbr   :   1 clc   :   0 
 clh   :   0 cli   :   1 cln   :   0 clr   :   0 cls   :   0 clt   :   0 
-clv   :   0 clz   :   0 com   :   1 cp    :   1 cpc   :   0 cpi   :   2 
+clv   :   0 clz   :   0 com   :   1 cp    :   1 cpc   :   0 cpi   :   3 
 cpse  :   0 dec   :   8 eor   :   0 icall :   0 ijmp  :   0 in    :   4 
-inc   :   0 ld    :   0 ldd   :   0 ldi   :  28 lds   :   6 lpm   :   0 
-lsl   :   0 lsr   :   1 mov   :   2 movw  :   0 neg   :   0 nop   :   0 
-or    :   0 ori   :   3 out   :  16 pop   :   7 push  :   7 rcall :  22 
-ret   :  12 reti  :   1 rjmp  :  16 rol   :   0 ror   :   0 sbc   :   0 
+inc   :   1 ld    :   0 ldd   :   0 ldi   :  27 lds   :   6 lpm   :   0 
+lsl   :   0 lsr   :   1 mov   :   3 movw  :   0 neg   :   0 nop   :   0 
+or    :   0 ori   :   3 out   :  16 pop   :   7 push  :   7 rcall :  24 
+ret   :  13 reti  :   1 rjmp  :  16 rol   :   0 ror   :   0 sbc   :   0 
 sbci  :   0 sbi   :   4 sbic  :   2 sbis  :   0 sbiw  :   0 sbr   :   1 
 sbrc  :   1 sbrs  :   3 sec   :   0 seh   :   0 sei   :   1 sen   :   0 
 ser   :   0 ses   :   0 set   :   0 sev   :   0 sez   :   0 sleep :   1 
 spm   :   0 st    :   0 std   :   0 sts   :   8 sub   :   0 subi  :   0 
 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 34 out of 105 (32.4%)
+Instructions used: 35 out of 105 (33.3%)
 
 "ATtiny85" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000184    386      0    386    8192   4.7%
+[.cseg] 0x000000 0x000190    398      0    398    8192   4.9%
 [.dseg] 0x000060 0x000065      0      5      5     512   1.0%
 [.eseg] 0x000000 0x000006      0      6      6     512   1.2%
 

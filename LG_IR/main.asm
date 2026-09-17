@@ -17,9 +17,9 @@ data_var: .byte 1       ; Reservar 1 byte de espacio
 
 .eseg                   ; Define el inicio del segmento de EEPROM
 .org 0x0000
-code_1: .byte 2         ; Código InStart
-code_2: .byte 2         ; Código EzAdjust
-code_3: .byte 2         ; Código PowerOnly
+code_1: .db 0x04, 0xFB  ; Código InStart
+code_2: .db 0x04, 0xFF  ; Código EzAdjust
+code_3: .db 0x04, 0xFE  ; Código PowerOnly
 
 .cseg                   ; Define el inicio del segmento de código
 .org 0x0000             ; Vector de Reset
@@ -76,8 +76,7 @@ RESET:
     ; 5. Seleccionar qué pin(es) dentro del grupo activan la interrupción en PCMSK (Pin Change Mask Register)
     ldi r16, (1 << PCINT4)|(1 << PCINT3)|(1 << PCINT2)
     out PCMSK, r16      ; Habilita PCINT0 específicamente
-	ldi r28, 0x00
-	ldi r29, 0x00
+	rcall clr_cont
 
     sei                     ; Reorientar interrupciones
 	rjmp main
@@ -86,27 +85,42 @@ RESET:
 
 main:
    adiw r28, 1
-   mov r16, r28
-   mov r17, r29
-   and r16, r17
-   cpi r16, 0xff           ; Si R28:R29 = 65.535 ejecuta power_down
+   ;mov r16, r28
+   ;mov r17, r29
+   ;and r16, r17
+   ;cpi r16, 0xff           ; Si R28:R29 = 65.535 ejecuta power_down
+   and r28, r29
+   cpi r28, 0xff
+   brne Q1
+   inc r15
+   mov r16, r15
+   cpi r16, 0xff
    breq to_pd
-   lds r16, mi_var
-   cpi r16, 0b00011100     ; Si no se presiono ningun botón salta a "main"
-   breq main
-   ; Si se presiono algún boton...
-   rcall delay_100ms
-   lds r17, old_var
-   cp r16,r17
-   breq boton_sel
-   sts old_var, r16
-   rjmp main
+
+Q1: lds r16, mi_var
+    cpi r16, 0b00011100     ; Si no se presiono ningun botón salta a "main"
+    breq main
+    ; Si se presiono algún boton...
+    rcall delay_100ms
+    lds r17, old_var
+    cp r16,r17
+    breq boton_sel
+    sts old_var, r16
+    rjmp main
 
 to_pd:
+   rcall clr_cont
    rcall power_down
    rjmp main
 
 ; ############################################################################################################
+
+clr_cont:
+    ldi r28, 0x00
+	mov r29, r28
+	mov r15, r28
+	ret
+
 
 power_down:
 ; Configurar bits SM1=1, SM0=0 (Power-down) y SE=1 (Sleep Enable)

@@ -45,13 +45,14 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
       <AvrAssembler>
-        <avrasm.assembler.general.AdditionalIncludeDirectories>
-          <ListValues>
-            <Value>%24(PackRepoDir)\atmel\ATtiny_DFP\1.10.348\avrasm\inc</Value>
-          </ListValues>
-        </avrasm.assembler.general.AdditionalIncludeDirectories>
-        <avrasm.assembler.general.IncludeFile>tn85def.inc</avrasm.assembler.general.IncludeFile>
-      </AvrAssembler>
+  <avrasm.assembler.general.GenerateEEPFile>True</avrasm.assembler.general.GenerateEEPFile>
+  <avrasm.assembler.general.AdditionalIncludeDirectories>
+    <ListValues>
+      <Value>%24(PackRepoDir)\atmel\ATtiny_DFP\1.10.348\avrasm\inc</Value>
+    </ListValues>
+  </avrasm.assembler.general.AdditionalIncludeDirectories>
+  <avrasm.assembler.general.IncludeFile>tn85def.inc</avrasm.assembler.general.IncludeFile>
+</AvrAssembler>
     </ToolchainSettings>
     <OutputType>Executable</OutputType>
   </PropertyGroup>
